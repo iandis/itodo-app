@@ -1,0 +1,1 @@
+enum GQLType { query, mutation }
