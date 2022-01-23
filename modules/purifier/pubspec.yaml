@@ -1,0 +1,11 @@
+name: purifier
+description: Module for handling an operation that is potentially throwing an error.
+version: 1.0.0
+publish_to: 'none'
+
+environment:
+  sdk: '>=2.14.4 <3.0.0'
+
+dev_dependencies:
+  lints: ^1.0.0
+  test: ^1.16.0
