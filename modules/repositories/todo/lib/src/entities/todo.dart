@@ -2,13 +2,13 @@ import 'todo_status.dart';
 
 class Todo {
   const Todo({
-    required this.id,
-    required this.title,
-    required this.subtitle,
-    required this.description,
-    required this.status,
-    required this.createdAt,
-    required this.updatedAt,
+    this.id,
+    this.title,
+    this.subtitle,
+    this.description,
+    this.status = TodoStatus.todo,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory Todo.fromMap(Map<String, dynamic> map) {
