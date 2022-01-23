@@ -64,7 +64,7 @@ class Todo {
   }
 
   Todo copyFrom(covariant Todo other) {
-    return Todo(
+    return copyWith(
       id: other.id,
       title: other.title,
       subtitle: other.subtitle,
