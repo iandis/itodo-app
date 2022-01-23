@@ -47,4 +47,10 @@ abstract class GQLExecutor<T> {
 
     return _parser.parse(result.data!);
   }
+
+  /// Calls [execute] without passing any variables.
+  @nonVirtual
+  Future<T> run() {
+    return execute(const <String, dynamic>{});
+  }
 }
