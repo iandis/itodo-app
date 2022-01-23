@@ -14,7 +14,7 @@ abstract class GQLParser<T> {
   bool get alwaysFetch => false;
 
   @alwaysThrows
-  void onError(OperationException exception) {
+  Never onError(OperationException exception) {
     log(
       '[$runtimeType] Unhandled exception.',
       name: 'GQLParser',
