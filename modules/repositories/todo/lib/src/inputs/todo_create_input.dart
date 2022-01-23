@@ -8,7 +8,7 @@ class TodoCreateInput {
 
   Map<String, dynamic> get variables {
     return <String, dynamic>{
-      'title': todo.title,
+      'title': todo.title!,
       'subtitle': todo.subtitle,
       'description': todo.description,
       'status': todo.status.name.toUpperCase(),

@@ -7,7 +7,7 @@ class TodoUpdateInput extends TodoCreateInput {
   @override
   Map<String, dynamic> get variables {
     return <String, dynamic>{
-      'id': todo.id,
+      'id': todo.id!,
       ...super.variables,
     };
   }
