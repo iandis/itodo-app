@@ -14,7 +14,7 @@ class _UserDetailParser extends GQLParser<User> {
   const _UserDetailParser();
 
   @override
-  String get document => r'''
+  String get document => '''
     query userDetail {
       userDetail {
         id
