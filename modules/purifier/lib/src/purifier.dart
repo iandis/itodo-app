@@ -3,6 +3,7 @@ import 'dart:developer' as dev show log;
 
 import 'purified.dart';
 
+// ignore: avoid_classes_with_only_static_members
 class Purifier {
   static final Map<Type, Function> _errHandlers = <Type, Function>{};
 
@@ -16,7 +17,7 @@ class Purifier {
   }
 
   static String? _handle(Object error) {
-    return _errHandlers[error.runtimeType]?.call(error);
+    return _errHandlers[error.runtimeType]?.call(error) as String?;
   }
 
   static FutureOr<Purified<T>> run<T>(FutureOr<T> Function() f) async {
