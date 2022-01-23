@@ -8,12 +8,12 @@ import 'gql_type.dart';
 abstract class GQLExecutor<T> {
   const GQLExecutor({
     required GQLClient client,
-    required GQLParser parser,
+    required GQLParser<T> parser,
   })  : _client = client,
         _parser = parser;
 
   final GQLClient _client;
-  final GQLParser _parser;
+  final GQLParser<T> _parser;
 
   FetchPolicy get _fetchPolicy => _parser.alwaysFetch
       ? FetchPolicy.networkOnly
