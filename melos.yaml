@@ -5,11 +5,11 @@ packages:
   - modules/repositories/**
   - '*'
 
-analyze:
-  run: melos exec -- flutter analyze .
-  description: Analyze all packages
-
 scripts:
+  analyze:
+    run: melos exec -- flutter analyze .
+    description: Analyze all packages
+
   test:
     run: melos exec --dir-exists="test" -- flutter test --coverage
     description: Run all tests with coverage
