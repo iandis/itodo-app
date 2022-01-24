@@ -19,17 +19,16 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+      
+      - name: Activate melos
+        run: dart pub global activate melos
 
       - name: Analyze project source
-        run: flutter analyze .
+        run: melos run analyze
 
-      # Your project will need to have tests in test/ and a dependency on
-      # package:test for this step to succeed. Note that Flutter projects will
-      # want to change this to 'flutter test'.
-      - name: Run tests
-        run: flutter test . --coverage
+      - name: Run tests using melos
+        run: melos run test
       
       - uses: codecov/codecov-action@v2.1.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: coverage
