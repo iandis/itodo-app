@@ -11,9 +11,16 @@ class Purifier {
 
   static final List<_ErrHandler<Object>> _errHandlers = <_ErrHandler<Object>>[];
 
+  static String Function(Object error)? _unknownErrHandler;
+
   Purifier on<T extends Object>(String Function(T error) handler) {
     final _ErrHandler<T> errHandler = _ErrHandler<T>(handler);
     _errHandlers.add(errHandler);
+    return this;
+  }
+
+  Purifier orElse(String Function(Object error) handler) {
+    _unknownErrHandler = handler;
     return this;
   }
 
@@ -26,6 +33,8 @@ class Purifier {
       final _ErrHandler<Object> handler = _errHandlers[errHandlerIndex];
       return handler(error);
     }
+
+    return _unknownErrHandler?.call(error);
   }
 
   Purified<T> run<T>(T Function() f) {
