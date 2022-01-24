@@ -38,6 +38,14 @@ Future<double> _asyncFuncThrowingTypeError() async {
   return _funcThrowingTypeError();
 }
 
+void _funcThrowingUnknownError() {
+  throw UnsupportedError('Unknown error');
+}
+
+Future<void> _asyncFuncThrowingUnknownError() async {
+  return _funcThrowingUnknownError();
+}
+
 void main() {
   Purifier()
     ..on<FormatException>((FormatException error) {
@@ -48,6 +56,9 @@ void main() {
     })
     ..on<TypeError>((TypeError error) {
       return 'Handled type error';
+    })
+    ..orElse((Object error) {
+      return 'Unknown error';
     });
 
   group('Verify behavior of [Purifier]:', () {
@@ -121,6 +132,26 @@ void main() {
         expect(normal.hasValue && async.hasValue, isFalse);
         expect(normal.error, 'Handled type error');
         expect(async.error, 'Handled type error');
+        expect(() => normal.value, throwsException);
+        expect(() => async.value, throwsException);
+      },
+    );
+
+    test(
+      'When a function throws an unknown error, '
+      'then return an error message of "Unknown error"',
+      () async {
+        final Purified<void> normal = Purifier().run(
+          _funcThrowingUnknownError,
+        );
+        final Purified<void> async = await Purifier().async(
+          _asyncFuncThrowingUnknownError,
+        );
+
+        expect(normal.hasError && async.hasError, isTrue);
+        expect(normal.hasValue && async.hasValue, isFalse);
+        expect(normal.error, 'Unknown error');
+        expect(async.error, 'Unknown error');
         expect(() => normal.value, throwsException);
         expect(() => async.value, throwsException);
       },
