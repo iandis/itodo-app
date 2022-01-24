@@ -5,7 +5,6 @@ import 'package:mockito/mockito.dart';
 import 'package:network/network.dart';
 import 'package:test/test.dart';
 import 'package:user/src/requests/user_detail.dart';
-import 'package:user/src/requests/user_update.dart';
 import 'package:user/user.dart';
 
 import '../gql.mocks.dart';
