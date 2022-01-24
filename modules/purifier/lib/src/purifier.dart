@@ -1,28 +1,36 @@
-import 'dart:async' show FutureOr;
 import 'dart:developer' as dev show log;
 
 import 'purified.dart';
 
-// ignore: avoid_classes_with_only_static_members
 class Purifier {
-  static final Map<Type, Function> _errHandlers = <Type, Function>{};
+  factory Purifier() => _instance;
 
-  static void on<T>(String Function(T error) handler) {
-    assert(
-      !_errHandlers.containsKey(T),
-      'You can only register one error handler for each type',
+  const Purifier._();
+
+  static const Purifier _instance = Purifier._();
+
+  static final List<_ErrHandler<Object>> _errHandlers = <_ErrHandler<Object>>[];
+
+  Purifier on<T extends Object>(String Function(T error) handler) {
+    final _ErrHandler<T> errHandler = _ErrHandler<T>(handler);
+    _errHandlers.add(errHandler);
+    return this;
+  }
+
+  String? _handle(Object error) {
+    final int errHandlerIndex = _errHandlers.indexWhere(
+      (final _ErrHandler<Object> handler) => handler.isTypeOf(error),
     );
 
-    _errHandlers[T] = handler;
+    if (errHandlerIndex != -1) {
+      final _ErrHandler<Object> handler = _errHandlers[errHandlerIndex];
+      return handler(error);
+    }
   }
 
-  static String? _handle(Object error) {
-    return _errHandlers[error.runtimeType]?.call(error) as String?;
-  }
-
-  static FutureOr<Purified<T>> run<T>(FutureOr<T> Function() f) async {
+  Purified<T> run<T>(T Function() f) {
     try {
-      final T result = await f();
+      final T result = f();
       return Purified<T>.success(result);
     } catch (err, stack) {
       dev.log(
@@ -34,5 +42,33 @@ class Purifier {
       final String? errMessage = _handle(err);
       return Purified<T>.failed(errMessage ?? err.toString());
     }
+  }
+
+  Future<Purified<T>> async<T>(Future<T> Function() f) async {
+    try {
+      final T result = await f();
+      return Purified<T>.success(result);
+    } catch (err, stack) {
+      dev.log(
+        'An async operation returning [$T] throws an error.',
+        name: 'Purifier',
+        error: err,
+        stackTrace: stack,
+      );
+      final String? errMessage = _handle(err);
+      return Purified<T>.failed(errMessage ?? err.toString());
+    }
+  }
+}
+
+class _ErrHandler<T extends Object> {
+  const _ErrHandler(this._handler);
+
+  final String Function(T error) _handler;
+
+  bool isTypeOf<E>(E other) => other is T;
+
+  String call(T error) {
+    return _handler(error);
   }
 }
