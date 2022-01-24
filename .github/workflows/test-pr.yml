@@ -1,0 +1,29 @@
+name: Test when PR to master branch
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test_pr:
+    name: Analyze and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '2.5.3'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Activate melos
+        run: dart pub global activate melos
+
+      - name: Analyze project source
+        run: melos run analyze
+
+      - name: Run tests using melos
+        run: melos run test
