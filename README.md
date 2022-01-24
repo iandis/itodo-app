@@ -1,4 +1,4 @@
-[![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
+[![codecov](https://codecov.io/gh/iandis/itodo-app/branch/master/graph/badge.svg?token=SL751Z1BAV)](https://codecov.io/gh/iandis/itodo-app) [![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
 # itodo
 
 A new Flutter project.
