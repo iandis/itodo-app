@@ -11,12 +11,23 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  network:
+    path: modules/network
+  purifier:
+    path: modules/purifier
+  todo:
+    path: modules/repositories/todo
+  user:
+    path: modules/repositories/user
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  graphql: ^5.0.0
   lint: ^1.7.2
+  mockito: ^5.0.17
+  test: ^1.16.0
 
 flutter:
   uses-material-design: true
