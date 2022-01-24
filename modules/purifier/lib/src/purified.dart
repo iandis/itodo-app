@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 abstract class _PurifiedBase<T, E> {
   /// The value of previous succeesful operation.
   ///
@@ -32,7 +34,14 @@ abstract class Purified<T> extends _PurifiedBase<T, String> {
   const factory Purified.failed(String error) = _Failed<T>;
 }
 
-class _Success<T> implements Purified<T> {
+@sealed
+@immutable
+abstract class Success<T> extends Purified<T> {
+  const factory Success(T value) = _Success<T>;
+}
+
+@immutable
+class _Success<T> implements Success<T> {
   const _Success(this._value);
 
   final T _value;
@@ -54,7 +63,14 @@ class _Success<T> implements Purified<T> {
   bool get hasError => false;
 }
 
-class _Failed<T> implements Purified<T> {
+@sealed
+@immutable
+abstract class Failed<T> extends Purified<T> {
+  const factory Failed(String error) = _Failed<T>;
+}
+
+@immutable
+class _Failed<T> implements Failed<T> {
   const _Failed(this._error);
 
   final String _error;
