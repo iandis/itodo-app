@@ -1,5 +1,5 @@
 name: itodo
-description: Your friend-app for creating TODOs.
+description: Your friendly app for creating TODOs.
 
 publish_to: 'none'
 
@@ -9,6 +9,10 @@ environment:
   sdk: '>=2.14.4 <3.0.0'
 
 dependencies:
+  auth:
+    path: modules/repositories/auth
+  firebase_auth: ^3.3.5
+  firebase_core: ^1.11.0
   flutter:
     sdk: flutter
   network:
