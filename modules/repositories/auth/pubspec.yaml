@@ -1,0 +1,21 @@
+name: auth
+description: Module for authentication needs.
+version: 1.0.0
+publish_to: 'none'
+
+environment:
+  sdk: '>=2.14.4 <3.0.0'
+  flutter: '>=2.5.3'
+
+dependencies:
+  firebase_auth: ^3.3.5
+  flutter:
+    sdk: flutter
+  google_sign_in: ^5.2.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  lint: ^1.7.2
+
+flutter: null
