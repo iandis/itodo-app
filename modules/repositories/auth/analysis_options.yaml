@@ -3,6 +3,8 @@ include: package:lint/analysis_options.yaml
 analyzer:
   errors:
     todo: info
+  exclude:
+    - test/**.mocks.dart
 
 linter:
   rules:
