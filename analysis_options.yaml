@@ -4,6 +4,9 @@ analyzer:
   errors:
     todo: info
 
+  exclude:
+    - lib/generated_plugin_registrant.dart
+
 linter:
   rules:
     sort_constructors_first: true
