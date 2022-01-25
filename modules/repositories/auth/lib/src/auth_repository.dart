@@ -1,3 +1,5 @@
+import 'package:auth/src/entities/auth_providers.dart';
+
 import 'entities/auth_result.dart';
 import 'providers/google_auth_service.dart';
 
@@ -10,12 +12,17 @@ abstract class AuthRepository {
 
   factory AuthRepository.create() = _AuthRepositoryImpl.create;
 
-  Future<AuthResult?> googleSignIn();
+  Future<AuthResult?> signIn([
+    AuthProviders provider = AuthProviders.google,
+  ]);
 
-  Future<AuthResult> googleSignUp({
+  Future<AuthResult> signUp({
+    AuthProviders provider = AuthProviders.google,
     required String email,
     required String password,
   });
 
-  Future<void> googleSignOut();
+  Future<void> signOut([
+    AuthProviders provider = AuthProviders.google,
+  ]);
 }

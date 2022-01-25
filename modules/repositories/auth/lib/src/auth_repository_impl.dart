@@ -14,23 +14,37 @@ class _AuthRepositoryImpl implements AuthRepository {
   final GoogleAuthService _googleAuthService;
 
   @override
-  Future<AuthResult?> googleSignIn() {
-    return _googleAuthService.signIn();
+  Future<AuthResult?> signIn([
+    AuthProviders provider = AuthProviders.google,
+  ]) {
+    switch (provider) {
+      case AuthProviders.google:
+        return _googleAuthService.signIn();
+    }
   }
 
   @override
-  Future<AuthResult> googleSignUp({
+  Future<AuthResult> signUp({
+    AuthProviders provider = AuthProviders.google,
     required String email,
     required String password,
   }) {
-    return _googleAuthService.signUp(
-      email: email,
-      password: password,
-    );
+    switch (provider) {
+      case AuthProviders.google:
+        return _googleAuthService.signUp(
+          email: email,
+          password: password,
+        );
+    }
   }
 
   @override
-  Future<void> googleSignOut() {
-    return _googleAuthService.signOut();
+  Future<void> signOut([
+    AuthProviders provider = AuthProviders.google,
+  ]) {
+    switch (provider) {
+      case AuthProviders.google:
+        return _googleAuthService.signOut();
+    }
   }
 }
