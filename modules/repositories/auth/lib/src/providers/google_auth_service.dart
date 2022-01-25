@@ -1,4 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:auth/src/providers/google_auth_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide GoogleAuthProvider;
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../entities/auth_result.dart';
@@ -7,18 +8,22 @@ class GoogleAuthService {
   const GoogleAuthService({
     required FirebaseAuth firebaseAuth,
     required GoogleSignIn googleSignIn,
+    required GoogleAuthProvider googleAuthProvider,
   })  : _firebaseAuth = firebaseAuth,
-        _googleSignIn = googleSignIn;
+        _googleSignIn = googleSignIn,
+        _googleAuthProvider = googleAuthProvider;
 
   factory GoogleAuthService.create() {
     return GoogleAuthService(
       firebaseAuth: FirebaseAuth.instance,
       googleSignIn: GoogleSignIn(),
+      googleAuthProvider: const GoogleAuthProvider(),
     );
   }
 
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
+  final GoogleAuthProvider _googleAuthProvider;
 
   Future<AuthResult?> signIn() async {
     final GoogleSignInAccount? signInAccount = await _googleSignIn.signIn();
@@ -27,7 +32,7 @@ class GoogleAuthService {
       final GoogleSignInAuthentication signInAuthentication =
           await signInAccount.authentication;
 
-      final AuthCredential credential = GoogleAuthProvider.credential(
+      final AuthCredential credential = _googleAuthProvider.create(
         accessToken: signInAuthentication.accessToken,
         idToken: signInAuthentication.idToken,
       );
