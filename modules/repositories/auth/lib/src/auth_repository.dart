@@ -12,6 +12,10 @@ abstract class AuthRepository {
 
   factory AuthRepository.create() = _AuthRepositoryImpl.create;
 
+  Future<AuthResult?> getCurrentSession([
+    AuthProviders provider = AuthProviders.google,
+  ]);
+
   Future<AuthResult?> signIn([
     AuthProviders provider = AuthProviders.google,
   ]);

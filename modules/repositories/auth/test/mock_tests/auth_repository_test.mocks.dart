@@ -28,6 +28,11 @@ class MockGoogleAuthService extends _i1.Mock implements _i3.GoogleAuthService {
   }
 
   @override
+  _i4.Future<_i2.AuthResult?> getCurrentSession() =>
+      (super.noSuchMethod(Invocation.method(#getCurrentSession, []),
+              returnValue: Future<_i2.AuthResult?>.value())
+          as _i4.Future<_i2.AuthResult?>);
+  @override
   _i4.Future<_i2.AuthResult?> signIn() =>
       (super.noSuchMethod(Invocation.method(#signIn, []),
               returnValue: Future<_i2.AuthResult?>.value())
