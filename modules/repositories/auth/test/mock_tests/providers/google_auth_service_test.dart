@@ -88,12 +88,16 @@ void main() {
     const int maxGoogleSignInSteps = 2;
     int currentGoogleSignInStep = 1;
 
+    const int maxCheckSessionSteps = 2;
+    int checkSessionStep = 1;
+
     tearDown(() {
       currentGoogleSignInStep++;
     });
 
     tearDownAll(() {
       verify(fakeGoogleSignIn.signIn()).called(maxGoogleSignInSteps);
+      verify(fakeFirebaseAuth.authStateChanges()).called(maxCheckSessionSteps);
     });
 
     setUpAll(() {
@@ -135,6 +139,15 @@ void main() {
       ).thenAnswer((_) async => fakeUserCredential);
 
       when(fakeFirebaseAuth.signOut()).thenAnswer((_) => Future<void>.value());
+
+      when(fakeFirebaseAuth.authStateChanges()).thenAnswer((_) async* {
+        if (checkSessionStep == 2) {
+          yield const FakeUser();
+        } else {
+          checkSessionStep++;
+          yield null;
+        }
+      });
     });
 
     test(
@@ -184,6 +197,35 @@ void main() {
         expect(fakeGoogleAuthService.signOut(), completes);
 
         verify(fakeFirebaseAuth.signOut()).called(1);
+      },
+    );
+
+    test(
+      'When [getCurrentSession] is called, '
+      'and is not signed in, '
+      'then return null',
+      () async {
+        final AuthResult? result =
+            await fakeGoogleAuthService.getCurrentSession();
+
+        expect(result, isNull);
+      },
+    );
+
+    test(
+      'When [getCurrentSession] is called, '
+      'and is signed in, '
+      'then return an [AuthResult] with an `id`, `isNewUser` = false, `name`, `email`, and `token`.',
+      () async {
+        final AuthResult? result =
+            await fakeGoogleAuthService.getCurrentSession();
+
+        expect(result, isNotNull);
+        expect(result!.id, equals(_fakeUid));
+        expect(result.isNewUser, isFalse);
+        expect(result.name, equals(_fakeDisplayName));
+        expect(result.email, equals(_fakeEmail));
+        expect(result.token, equals(_fakeIdToken));
       },
     );
   });

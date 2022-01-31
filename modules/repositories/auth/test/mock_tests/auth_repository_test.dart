@@ -13,6 +13,8 @@ void main() {
   const String fakeId = 'fake-id';
   const String fakeEmail = 'fake@email.com';
   const String fakePassword = 'fake-pass';
+  const String fakeName = 'fake-name';
+  const String fakeToken = 'fake-token';
 
   final GoogleAuthService fakeAuthService = MockGoogleAuthService();
   final AuthRepository fakeRepository = AuthRepository(
@@ -23,13 +25,17 @@ void main() {
     const int maxSignInSteps = 2;
     int signInStep = 0;
 
+    const int maxCheckSessionSteps = 2;
+    int checkSessionStep = 1;
+
     setUp(() {
       signInStep++;
     });
 
     tearDownAll(() {
-      verify(fakeAuthService.signIn())
-          .called(maxSignInSteps);
+      verify(fakeAuthService.signIn()).called(maxSignInSteps);
+
+      verify(fakeAuthService.getCurrentSession()).called(maxCheckSessionSteps);
     });
 
     setUpAll(() {
@@ -56,6 +62,20 @@ void main() {
       });
 
       when(fakeAuthService.signOut()).thenAnswer((_) => Future<void>.value());
+
+      when(fakeAuthService.getCurrentSession()).thenAnswer((_) async {
+        if (checkSessionStep == 2) {
+          return const AuthResult(
+            id: fakeId,
+            name: fakeName,
+            email: fakeEmail,
+            token: fakeToken,
+            isNewUser: false,
+          );
+        }
+
+        checkSessionStep++;
+      });
     });
 
     test(
@@ -98,11 +118,38 @@ void main() {
     test(
       'When [signOut] with `google` is called, '
       'then completes without error',
-      ()  {
+      () {
         expect(
           fakeRepository.signOut(),
           completes,
         );
+      },
+    );
+
+    test(
+      'When [getCurrentSession] with `google` is called, '
+      'and user is not signed in, '
+      'then return null.',
+      () async {
+        final AuthResult? result = await fakeRepository.getCurrentSession();
+
+        expect(result, isNull);
+      },
+    );
+
+    test(
+      'When [getCurrentSession] with `google` is called, '
+      'and user is signed in, '
+      'then return an [AuthResult] with an `id`, `isNewUser` = false, `name`, `email`, and `token`.',
+      () async {
+        final AuthResult? result = await fakeRepository.getCurrentSession();
+
+        expect(result, isNotNull);
+        expect(result!.id, equals(fakeId));
+        expect(result.isNewUser, isFalse);
+        expect(result.name, equals(fakeName));
+        expect(result.email, equals(fakeEmail));
+        expect(result.token, equals(fakeToken));
       },
     );
   });
