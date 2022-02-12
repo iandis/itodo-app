@@ -25,6 +25,24 @@ class GoogleAuthService {
   final GoogleSignIn _googleSignIn;
   final GoogleAuthProvider _googleAuthProvider;
 
+  Stream<AuthResult?> get currentSession async* {
+    final Stream<User?> sessionStream = _firebaseAuth.authStateChanges();
+    await for (final User? currentSession in sessionStream) {
+      AuthResult? result;
+      if (currentSession != null) {
+        result = AuthResult(
+          id: currentSession.uid,
+          name: currentSession.displayName,
+          email: currentSession.email,
+          image: currentSession.photoURL,
+          token: await currentSession.getIdToken(true),
+          isNewUser: false,
+        );
+      }
+      yield result;
+    }
+  }
+
   Future<AuthResult?> getCurrentSession() async {
     final User? currentSession = await _firebaseAuth.authStateChanges().first;
     if (currentSession != null) {
