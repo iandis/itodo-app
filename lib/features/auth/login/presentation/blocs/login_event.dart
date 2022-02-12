@@ -7,6 +7,4 @@ abstract class LoginEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoginWithGoogle extends LoginEvent {
-  const LoginWithGoogle();
-}
+class LoginWithGoogleEvent extends LoginEvent {}

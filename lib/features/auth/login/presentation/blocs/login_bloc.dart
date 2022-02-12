@@ -14,14 +14,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   })  : _authRepository = authRepository,
         _userRepository = userRepository,
         super(const LoginInit()) {
-    on<LoginWithGoogle>(_onLoginWithGoogle);
+    on<LoginWithGoogleEvent>(_onLoginWithGoogle);
   }
 
   final AuthRepository _authRepository;
   final UserRepository _userRepository;
 
   Future<void> _onLoginWithGoogle(
-    LoginWithGoogle event,
+    LoginWithGoogleEvent event,
     Emitter<LoginState> emit,
   ) async {
     if (state is LoginLoading) {
