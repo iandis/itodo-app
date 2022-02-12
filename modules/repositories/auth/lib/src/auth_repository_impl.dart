@@ -14,6 +14,16 @@ class _AuthRepositoryImpl implements AuthRepository {
   final GoogleAuthService _googleAuthService;
 
   @override
+  Stream<AuthResult?> currentSessionChanges([
+    AuthProviders provider = AuthProviders.google,
+  ]) {
+    switch (provider) {
+      case AuthProviders.google:
+        return _googleAuthService.currentSession;
+    }
+  }
+
+  @override
   Future<AuthResult?> getCurrentSession([
     AuthProviders provider = AuthProviders.google,
   ]) {
