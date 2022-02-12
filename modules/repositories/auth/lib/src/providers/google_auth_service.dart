@@ -76,7 +76,7 @@ class GoogleAuthService {
       final AuthResult authResult = AuthResult(
         id: userCredential.user!.uid,
         isNewUser: userCredential.additionalUserInfo!.isNewUser,
-        token: signInAuthentication.idToken,
+        token: await userCredential.user!.getIdToken(true),
         name: userCredential.user!.displayName,
         email: userCredential.user!.email,
         image: userCredential.user!.photoURL,
