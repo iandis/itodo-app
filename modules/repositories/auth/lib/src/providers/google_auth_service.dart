@@ -105,7 +105,8 @@ class GoogleAuthService {
     return authResult;
   }
 
-  Future<void> signOut() {
+  Future<void> signOut() async {
+    await _googleSignIn.signOut();
     return _firebaseAuth.signOut();
   }
 }
