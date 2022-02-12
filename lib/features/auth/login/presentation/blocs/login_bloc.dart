@@ -33,6 +33,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     final result = await Purifier().async(() => _loginWithGoogle(emit));
 
     if (result.hasError) {
+      await _authRepository.signOut();
       emit(LoginError(result.error));
     }
   }
